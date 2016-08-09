@@ -1,0 +1,12 @@
+.dir {
+    background-image: url('folder.png');
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    list-style-type: none;
+}
+
+.file {
+    list-style-type: none;
+    float: left;
+    margin: 5px;
+}
