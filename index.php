@@ -42,28 +42,39 @@ function sanitizePath($image_start_dirs, $path) {
 }
 
 function printDirContent($path, $isStartDir, $thumbnail_cache_dir) {
-    $dir = dir($path);
+    $dirObj = dir($path);
     #echo "<ul>";
     echo "<div id=\"links\">";
     if (!$isStartDir) {
         $parentDir = dirname($path);
         printDir($parentDir, "..");
     }
-    while (false !== ($entry = $dir->read())) {
+    $dirs = array();
+    $files = array();
+    while (false !== ($entry = $dirObj->read())) {
         // ignore dot files
         $isDotFile = (substr($entry, 0, 1) === ".");
         if (!$isDotFile) {
             $fullPath = $path . "/" . $entry;
             if (is_dir($fullPath)) {
-                printDir($fullPath, $entry);
+                array_push($dirs, $entry);
             } elseif (is_file($fullPath)) {
-                handleFile($path, $entry, $thumbnail_cache_dir);
+                array_push($files, $entry);
             }
         }
     }
+    sort($dirs);
+    sort($files);
+    foreach ($dirs as $dir) {
+        $fullPath = $path . "/" . $dir;
+        printDir($fullPath, $dir);
+    }
+    foreach ($files as $file) {
+        handleFile($path, $file, $thumbnail_cache_dir);
+    }
     #echo "</ul>";
     echo "</div>";
-    $dir->close();
+    $dirObj->close();
 }
 
 function handleFile($path, $fileName, $thumbnail_cache_dir) {
@@ -76,7 +87,9 @@ function handleFile($path, $fileName, $thumbnail_cache_dir) {
             $thumbFileFullPath = $thumbDirFullPath."/".$fileName;
             $originalFullPath = $path."/".$fileName;
             if (!file_exists($thumbFileFullPath)) {
-                mkdir($thumbDirFullPath, 0777, true);
+                if (!file_exists($thumbDirFullPath)) {
+                    mkdir($thumbDirFullPath, 0777, true);
+                }
                 createThumb($originalFullPath, $thumbFileFullPath);
             }
             printImgFile($originalFullPath, $thumbFileFullPath);
