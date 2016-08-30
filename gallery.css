@@ -9,4 +9,13 @@
     list-style-type: none;
     float: left;
     margin: 5px;
+    display: block;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+}
+
+.file img {
+    display: block;
+    margin: auto;
 }
