@@ -93,6 +93,7 @@ function handleFile($path, $fileName, $thumbnail_cache_dir) {
                 createThumb($originalFullPath, $thumbFileFullPath);
             }
             printImgFile($originalFullPath, $thumbFileFullPath);
+            printImgPrefetch($originalFullPath);
         }
     }
 }
@@ -106,6 +107,10 @@ function printImgFile($originalFullPath, $thumbFullPath) {
     echo "<a class=\"file\" href=\"$originalFullPath\" data-dialog>";
     echo "<img src=\"$thumbFullPath\" />";
     echo "</a>";
+}
+
+function printImgPrefetch($originalFullPath) {
+    echo "<link rel=\"prefetch\" href=\"$originalFullPath\" />";
 }
 
 function printDir($path, $name) {
