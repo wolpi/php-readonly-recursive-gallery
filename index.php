@@ -99,7 +99,13 @@ function handleFile($path, $fileName, $thumbnail_cache_dir) {
 }
 
 function createThumb($originalFullPath, $thumbFullPath) {
+    $originalFullPath = escapePathForConvert($originalFullPath);
+    $thumbFullPath = escapePathForConvert($thumbFullPath);
     exec("convert $originalFullPath -resize 64x64\> $thumbFullPath");
+}
+
+function escapePathForConvert($path) {
+    return str_replace(" ", "\\ ", $path);
 }
 
 function printImgFile($originalFullPath, $thumbFullPath) {
